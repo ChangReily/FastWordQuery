@@ -35,7 +35,7 @@ class Cambridge(WebService):
         element = soup.find('div', class_=page)
         if element:
             # 页
-            elements = element.find_all('div', class_='entry-body__el')
+            elements = element.findAll('div', class_='entry-body__el')
             header_found = False
             for element in elements:
                 if element:
@@ -57,7 +57,7 @@ class Cambridge(WebService):
                                     header_found = True
 
                     # 义
-                    senses = element.find_all('div', class_='pos-body')
+                    senses = element.findAll('div', class_='pos-body')
                     # 词性
                     span_posgram = element.find('div', class_='posgram')
                     pos_gram = (span_posgram.get_text() if span_posgram else '')
@@ -74,7 +74,7 @@ class Cambridge(WebService):
                                 h3_rt = sense.find('h3', class_='runon-title')
                                 runon_title = (h3_rt.get_text() if h3_rt else None)
 
-                            sense_body = sense.find('div', class_=re.compile("sense-body|runon-body pad-indent"))
+                            sense_body = sense.find_all('div', class_=re.compile("def-block ddef_block"))
 
                             if sense_body:
                                 l = result['def_list']
@@ -181,3 +181,4 @@ class Cambridge(WebService):
         if val == None or val == '':
             return ''
         return self._css(val)
+    
