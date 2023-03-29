@@ -188,4 +188,3 @@ class Cambridge(WebService):
         if val == None or val == '':
             return ''
         return self._css(val)
-1
