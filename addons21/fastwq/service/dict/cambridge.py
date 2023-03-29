@@ -57,10 +57,16 @@ class Cambridge(WebService):
                                     header_found = True
 
                     # 义
-                    senses = element.findAll('div', class_='pos-body')
+                    senses = element.findAll('div', class_=re.compile("pos-body|dsense-noh"))
                     # 词性
-                    span_posgram = element.find('div', class_='posgram')
+                    span_posgram = element.find('div', class_=re.compile("posgram"))
                     pos_gram = (span_posgram.get_text() if span_posgram else '')
+                    pos_gram_1=''
+                    if pos_gram == '':
+                        span_posgram = element.find('span', class_='anc-info-head')
+                        pos_gram = (span_posgram.get_text() if span_posgram else '')
+                        span_posgram = element.find_all('span', class_='pos dpos')
+                        pos_gram_1 = (span_posgram[1].get_text() if span_posgram else '')
 
                     if senses:
                         for sense in senses:
@@ -104,8 +110,9 @@ class Cambridge(WebService):
                                     tran = block.find('span', class_='trans')
                                     examps = block.find_all('div', class_='examp dexamp')
                                     l.append(
-                                        u'<li>{0}{1}{2}{3}{4} {5}{6}</li>'.format(
+                                        u'<li>{0}{1}{2}{3}{4}{5} {6}{7}</li>'.format(
                                             '<span class="epp-xref">{0}</span>'.format(pos_gram) if pos_gram != '' else '',
+                                            '<span class="epp-xref">{0}</span>'.format(pos_gram_1) if pos_gram_1 != '' else '',
                                             '<span class="epp-xref">{0}</span>'.format(runon_title) if runon_title else '',
                                             '<span class="epp-xref">{0}</span>'.format(phrase) if phrase else '',
                                             '<span class="epp-xref">{0}</span>'.format(def_info) if def_info.strip() != '' else '',
@@ -181,4 +188,4 @@ class Cambridge(WebService):
         if val == None or val == '':
             return ''
         return self._css(val)
-    
+1
